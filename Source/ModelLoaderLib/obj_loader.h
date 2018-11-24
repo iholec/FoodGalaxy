@@ -3,7 +3,7 @@
 #ifndef OBJ_LOADER_H_INCLUDED
 #define OBJ_LOADER_H_INCLUDED
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <vector>
 #include <string>
 

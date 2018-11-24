@@ -1,5 +1,4 @@
 #pragma once
-#include "Object.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h> 
 #include <OpenGL/gl.h>  
@@ -9,6 +8,7 @@
 #include <GL/gl.h>  
 #include <GL/glu.h>  
 #endif
+#include "Object.h"
 
 
 class Galaxy
@@ -19,6 +19,6 @@ public:
 	~Galaxy();
 	float centerX, centerY, centerZ;
 	float rotaX, rotaY, rotaZ;
-	//Contains all Planets
+	//Contains all Planets	
 	Object planets[10];
 };

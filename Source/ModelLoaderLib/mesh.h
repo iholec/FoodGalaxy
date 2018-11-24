@@ -3,7 +3,7 @@
 #define MESH_INCLUDED_H
 
 #include "glew.h"
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <string>
 #include <vector>
 #include "obj_loader.h"

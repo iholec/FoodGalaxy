@@ -8,17 +8,28 @@
 #include <GL/gl.h>  
 #include <GL/glu.h>  
 #endif
+
 class Object
 {
 public:
 	Object();//Positions, Texture and Rotation are randomized in the constuctor
 	~Object();
 	int rotateAround;
+	float totalPosX, totalPosY, totalPosZ;
 	float posX, posY, posZ;
 	float rotaX1, rotaY1, rotaZ1;
 	float rotaX2, rotaY2, rotaZ2;
 	float rotaSpeed;
 	float size;
+	float distanceToCamera;
 	int texture;
+	int lod;
+
+	float GetDistanceToCamera(float cameraX, float cameraY, float cameraZ) const;
+	void RecalculateLOD(float cameraX, float cameraY, float cameraZ);
+	void RecalculateTotalPosFromMatrix(float matrixX, float matrixY, float matrixZ);
+
+private:
+	int lod1Dist, lod2Dist;
 };
 

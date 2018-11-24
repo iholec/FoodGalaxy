@@ -45,9 +45,9 @@
 using namespace std;
 
 int window;
-float advanceX = 0.0f;
-float advanceZ = 0.0f;
-float advanceY = 0.0f;
+float cameraX = 0.0f;
+float cameraY = 0.0f;
+float cameraZ = -50.0f;
 
 bool discomode = false;
 
@@ -108,27 +108,27 @@ void keyPressed(unsigned char key, int x, int y)
 		exit(0);
 		break;
 	case 'w':     /* <cursor up> */
-		advanceX += 0.1f;
+		cameraZ += 0.1f;
 		glutPostRedisplay();
 		break;
 	case 's':     /* <cursor down> */
-		advanceX -= 0.1f;
+		cameraZ -= 0.1f;
 		glutPostRedisplay();
 		break;
 	case 'a':
-		advanceZ += 0.1f;
+		cameraX += 0.1f;
 		glutPostRedisplay();
 		break;
 	case 'd':
-		advanceZ -= 0.1f;
+		cameraX -= 0.1f;
 		glutPostRedisplay();
 		break;
 	case 'q':
-		advanceY += 0.1f;
+		cameraY += 0.1f;
 		glutPostRedisplay();
 		break;
 	case 'e':
-		advanceY -= 0.1f;
+		cameraY -= 0.1f;
 		glutPostRedisplay();
 		break;
 	case 'r':
@@ -165,8 +165,9 @@ void keyPressed(unsigned char key, int x, int y)
 	}
 }
 
+
 //draws a cube with a different texture on every side. Scaleable.
-void drawCube(GLuint *texfront, GLuint *texback, GLuint *textop, GLuint *texbottom, GLuint *texright, GLuint *texleft, int Scale)
+void drawCube(GLuint *texfront, GLuint *texback, GLuint *textop, GLuint *texbottom, GLuint *texright, GLuint *texleft, float Scale)
 {
 	glBindTexture(GL_TEXTURE_2D, *texfront);
 	glBegin(GL_QUADS);
@@ -223,6 +224,74 @@ void drawCube(GLuint *texfront, GLuint *texback, GLuint *textop, GLuint *texbott
 	glEnd();
 }
 
+void drawCube(GLuint *tex, float size)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, *tex);
+	glBegin(GL_QUADS);
+	// front face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	// back face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	// top face
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	// bottom face
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	// right face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	// left face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void drawPyramid(GLuint *tex, float size)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, *tex);
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+	glEnd();
+
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
 //draws a classic Sphere
 void drawSphere(GLuint *tex, float size) {
 
@@ -262,7 +331,7 @@ void drawGlowingSphere(GLuint *tex, float size, GLfloat *glowColor) {
 		glMaterialfv(GL_FRONT, GL_EMISSION, softSun);
 	}
 
-	//
+	
 	//disco mode
 
 
@@ -276,6 +345,22 @@ void drawSpiegelei(GLuint *tex) {
 	glBindTexture(GL_TEXTURE_2D, *tex);
 	SpiegeleiMesh->Draw();
 	glDisable(GL_TEXTURE_2D);
+}
+
+void draw(GLuint *tex, Object planet)
+{
+	switch(planet.lod)
+	{
+	case 0:
+		drawSphere(tex, planet.size);
+		break;
+	case 1:
+		drawCube(tex, planet.size);
+		break;
+	case 2:
+		drawPyramid(tex, planet.size);
+		break;
+	}
 }
 
 //draws and animates because it is called every frame
@@ -297,16 +382,15 @@ void display()
 
 	drawCube(&textures[11], &textures[9], &textures[12], &textures[13], &textures[10], &textures[8], 150);
 
-	glTranslatef(advanceZ, advanceY, advanceX);
+	glTranslatef(cameraX, cameraY, cameraZ);
 
 	hour += inc;
 	day += inc / 24.0;
 	hour = hour - ((int)(hour / 24)) * 24;
 	day = day - ((int)(day / 365)) * 365;
 
-	glTranslatef(0.0, 0.0, -50.0);
 
-	glRotatef(360 * day / 365.0, 0.0, 1.0, 0.0);
+	//glRotatef(360 * day / 365.0, 0.0, 1.0, 0.0);
 
 	// ecliptic
 	glRotatef(15.0, 1.0, 0.0, 0.0);
@@ -316,6 +400,7 @@ void display()
 	{
 		glPushMatrix();
 		Galaxy g = galaxies[i];
+		
 		glTranslatef(g.centerX, g.centerY, g.centerZ);
 		GLfloat sunLight[] = { 1,1,0 };
 		drawGlowingSphere(&textures[15], 0.5, sunLight);
@@ -324,6 +409,7 @@ void display()
 		{
 			Object p = g.planets[i];
 			Object center = g.planets[p.rotateAround];
+
 			glRotatef(360.0*day / 365.0, g.rotaX, g.rotaY, g.rotaZ);
 			glPushMatrix();
 
@@ -333,7 +419,15 @@ void display()
 
 			glTranslatef(p.posX, p.posY, p.posZ);
 			glRotatef(360.0*day / 24.0, p.rotaX2, p.rotaY2, p.rotaZ2);
-			drawSphere(&textures[p.texture], p.size);
+			//p.RecalculateTotalPos(g.centerX, g.centerY, g.centerZ);
+			float mat[16];
+			glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+
+			p.RecalculateTotalPosFromMatrix(mat[12],mat[13],mat[14]);
+			p.RecalculateLOD(-cameraX, -cameraY, -cameraZ);
+
+			draw(&textures[p.texture], p);
+			//drawSphere(&textures[p.texture], p.size);
 			glPopMatrix();
 		}
 		glPopMatrix();
