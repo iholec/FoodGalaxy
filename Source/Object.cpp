@@ -58,6 +58,108 @@ void Object::RecalculateTotalPosFromMatrix(float galaxyX, float galaxyY, float g
 	totalPosZ = galaxyZ;
 }
 
+void Object::draw(const float cameraX, const float cameraY, const float cameraZ)
+{
+	RecalculateLOD(cameraX, cameraY, cameraZ);
+	switch (lod)
+	{
+	case 0:
+		drawSphere();
+		break;
+	case 1:
+		drawCube();
+		break;
+	case 2:
+		drawPyramid();
+		break;
+	}
+
+}
+
+void Object::drawCube()
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+	glBegin(GL_QUADS);
+	// front face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	// back face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	// top face
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	// bottom face
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	// right face
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+	// left face
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+void Object::drawPyramid()
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	glBegin(GL_TRIANGLES);
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+
+	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
+	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
+	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
+
+	glEnd();
+
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
+
+//draws a classic Sphere
+void Object::drawSphere() {
+
+	GLUquadric *qobj = gluNewQuadric();
+
+	gluQuadricTexture(qobj, GL_TRUE);
+	gluQuadricNormals(qobj, GLU_SMOOTH);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	gluSphere(qobj, size, 20, 20);
+
+	gluDeleteQuadric(qobj);
+	glDisable(GL_TEXTURE_2D);
+}
 
 Object::~Object()
 {

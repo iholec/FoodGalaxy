@@ -224,91 +224,6 @@ void drawCube(GLuint *texfront, GLuint *texback, GLuint *textop, GLuint *texbott
 	glEnd();
 }
 
-void drawCube(GLuint *tex, float size)
-{
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, *tex);
-	glBegin(GL_QUADS);
-	// front face
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
-	// back face
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
-	// top face
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
-	// bottom face
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	// right face
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, -1.0f*size);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f*size, 1.0f*size, 1.0f*size);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-	// left face
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, 1.0f*size);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f*size, 1.0f*size, -1.0f*size);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-}
-
-void drawPyramid(GLuint *tex, float size)
-{
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, *tex);
-
-	glBegin(GL_TRIANGLES);
-	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
-	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-
-	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
-	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
-
-	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(0.0f*size, 1.0f*size, 0.0f*size);
-	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-
-
-	glTexCoord3f(1.0f, 0.0f, 0.0f); glVertex3f(-1.0f*size, -1.0f*size, 1.0f*size);
-	glTexCoord3f(0.0f, 1.0f, 0.0f); glVertex3f(0.0f*size, -1.0f*size, -1.0f*size);
-	glTexCoord3f(0.0f, 0.0f, 1.0f); glVertex3f(1.0f*size, -1.0f*size, 1.0f*size);
-
-	glEnd();
-
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-}
-
-//draws a classic Sphere
-void drawSphere(GLuint *tex, float size) {
-
-	GLUquadric *qobj = gluNewQuadric();
-
-	gluQuadricTexture(qobj, GL_TRUE);
-	gluQuadricNormals(qobj, GLU_SMOOTH);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, *tex);
-
-	gluSphere(qobj, size, 20, 20);
-
-	gluDeleteQuadric(qobj);
-	glDisable(GL_TEXTURE_2D);
-}
-
 //draws a sphere that emittes light
 void drawGlowingSphere(GLuint *tex, float size, GLfloat *glowColor) {
 
@@ -347,21 +262,7 @@ void drawSpiegelei(GLuint *tex) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-void draw(GLuint *tex, Object planet)
-{
-	switch(planet.lod)
-	{
-	case 0:
-		drawSphere(tex, planet.size);
-		break;
-	case 1:
-		drawCube(tex, planet.size);
-		break;
-	case 2:
-		drawPyramid(tex, planet.size);
-		break;
-	}
-}
+
 
 //draws and animates because it is called every frame
 void display()
@@ -424,9 +325,7 @@ void display()
 			glGetFloatv(GL_MODELVIEW_MATRIX, mat);
 
 			p.RecalculateTotalPosFromMatrix(mat[12],mat[13],mat[14]);
-			p.RecalculateLOD(-cameraX, -cameraY, -cameraZ);
-
-			draw(&textures[p.texture], p);
+			p.draw(-cameraX, -cameraY, -cameraZ);
 			//drawSphere(&textures[p.texture], p.size);
 			glPopMatrix();
 		}
@@ -452,7 +351,7 @@ void initUniverse() {
 		{
 
 			Object planet;
-			planet.texture = rand() % (numberOfTextures);
+			planet.texture = &textures[rand() % (numberOfTextures)];
 			planet.rotateAround = 0;
 			cout << planet.texture;
 

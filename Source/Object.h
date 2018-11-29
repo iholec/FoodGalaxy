@@ -22,14 +22,19 @@ public:
 	float rotaSpeed;
 	float size;
 	float distanceToCamera;
-	int texture;
+	GLuint* texture;
 	int lod;
 
 	float GetDistanceToCamera(float cameraX, float cameraY, float cameraZ) const;
 	void RecalculateLOD(float cameraX, float cameraY, float cameraZ);
 	void RecalculateTotalPosFromMatrix(float matrixX, float matrixY, float matrixZ);
+	void draw(const float cameraX, const float cameraY, const float cameraZ);
 
 private:
 	int lod1Dist, lod2Dist;
+
+	void drawSphere();
+	void drawCube();
+	void drawPyramid();
 };
 
