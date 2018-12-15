@@ -388,9 +388,9 @@ int initTexture(char* picture, GLuint* tex) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-
 	// Upload the texture bitmap. 
 	w = info->width;
 	h = info->height;
@@ -409,6 +409,7 @@ int initTexture(char* picture, GLuint* tex) {
 //mostly just texture loading
 void init(int width, int height)
 {
+	cout << glGetString(GL_VERSION) << endl;
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 
