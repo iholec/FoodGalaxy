@@ -21,7 +21,7 @@
 #include <OpenGL/glu.h>  
 #else
 #include <GL/glut.h> 
-#include <GL/gl.h>  
+//#include <GL/gl.h>  
 #include <GL/glu.h>  
 #endif
 
@@ -224,13 +224,17 @@ void drawCube(GLuint *texfront, GLuint *texback, GLuint *textop, GLuint *texbott
 	glEnd();
 }
 
-//draws a sphere that emittes light
+//draws a sphere that emits light
 void drawGlowingSphere(GLuint *tex, float size, GLfloat *glowColor) {
 
 	GLUquadric *qobj = gluNewQuadric();
 
 	gluQuadricTexture(qobj, GL_TRUE);
 	gluQuadricNormals(qobj, GLU_SMOOTH);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, *tex);
@@ -242,16 +246,13 @@ void drawGlowingSphere(GLuint *tex, float size, GLfloat *glowColor) {
 		glMaterialfv(GL_FRONT, GL_EMISSION, discomode);
 	}
 	else {
-		GLfloat softSun[] = { 0.4, 0.4, 0.4 };
+		GLfloat softSun[] = { 0.4, 0.4, 0.4};
 		glMaterialfv(GL_FRONT, GL_EMISSION, softSun);
 	}
 
-	
-	//disco mode
-
-
 	gluDeleteQuadric(qobj);
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
 }
 
 //draws the white part of a fried egg (model)
@@ -263,6 +264,10 @@ void drawSpiegelei(GLuint *tex) {
 }
 
 
+bool distanceComparison(Galaxy i, Galaxy j)
+{
+	return i.distanceToCam > j.distanceToCam;
+}
 
 //draws and animates because it is called every frame
 void display()
@@ -291,7 +296,7 @@ void display()
 	day = day - ((int)(day / 365)) * 365;
 
 
-	//glRotatef(360 * day / 365.0, 0.0, 1.0, 0.0);
+	glRotatef(360 * day / 365.0, 0.0, 1.0, 0.0);
 
 	// ecliptic
 	glRotatef(15.0, 1.0, 0.0, 0.0);
@@ -301,11 +306,10 @@ void display()
 	{
 		glPushMatrix();
 		Galaxy g = galaxies[i];
+
 		
 		glTranslatef(g.centerX, g.centerY, g.centerZ);
-		GLfloat sunLight[] = { 1,1,0 };
-		drawGlowingSphere(&textures[15], 0.5, sunLight);
-		drawSpiegelei(&textures[16]);
+		
 		for (int i = 0; i < GALAXY_AMOUNT; i++)
 		{
 			Object p = g.planets[i];
@@ -324,18 +328,51 @@ void display()
 			float mat[16];
 			glGetFloatv(GL_MODELVIEW_MATRIX, mat);
 
-			p.RecalculateTotalPosFromMatrix(mat[12],mat[13],mat[14]);
+			p.SetTotalPosFromMatrix(mat[12],mat[13],mat[14]);
 			p.draw(-cameraX, -cameraY, -cameraZ);
 			//drawSphere(&textures[p.texture], p.size);
 			glPopMatrix();
 		}
+
+		float mat[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+		g.SetTotalPosFromMatrix(mat[12], mat[13], mat[14]);
+		g.GetDistanceToCamera(-cameraX, -cameraY, -cameraZ);
+
+		drawSpiegelei(&textures[16]);
 		glPopMatrix();
 
 	}
+	glDepthMask(GL_FALSE);
+
+
+	vector<Galaxy> allGalaxies(galaxies, galaxies+10);
+	sort(allGalaxies.begin(), allGalaxies.end(), distanceComparison);
+
+	for (int i = 0; i < GALAXY_AMOUNT; i++)
+	{
+		glPushMatrix();
+		Galaxy g = allGalaxies[i];
+		
+		glTranslatef(g.centerX, g.centerY, g.centerZ);
+		
+		//glDisable(GL_CULL_FACE);
+		GLfloat sunLight[] = { 1,1,0 };
+		drawGlowingSphere(&textures[15], 0.5, sunLight);
+		//glEnable(GL_CULL_FACE);
+
+		
+
+		glPopMatrix();
+	}
+	glDepthMask(GL_TRUE);
+
 
 	glutSwapBuffers();
 
 }
+
+
 
 //initializes a random Universe with a fried egg Sun
 //adds the planets to the galaxies planet array
@@ -379,10 +416,8 @@ int initTexture(char* picture, GLuint* tex) {
 		return 0;
 	}
 
-
 	mode = info->pixelDepth / 8;  // will be 3 for rgb, 4 for rgba
 	glGenTextures(1, tex);
-
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glBindTexture(GL_TEXTURE_2D, *tex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -390,7 +425,7 @@ int initTexture(char* picture, GLuint* tex) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	// Upload the texture bitmap. 
 	w = info->width;
 	h = info->height;
@@ -417,7 +452,6 @@ void init(int width, int height)
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 
 	resize(width, height);

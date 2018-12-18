@@ -51,13 +51,14 @@ void Object::RecalculateLOD(const float cameraX, const float cameraY, float came
 }
 
 
-void Object::RecalculateTotalPosFromMatrix(float galaxyX, float galaxyY, float galaxyZ)
+void Object::SetTotalPosFromMatrix(float matrixX, float matrixY, float matrixZ)
 {
-	totalPosX = galaxyX;
-	totalPosY = galaxyY;
-	totalPosZ = galaxyZ;
+	totalPosX = matrixX;
+	totalPosY = matrixY;
+	totalPosZ = matrixZ;
 }
 
+//Draws the correct Mesh for the current distance to the camera (LOD)
 void Object::draw(const float cameraX, const float cameraY, const float cameraZ)
 {
 	RecalculateLOD(cameraX, cameraY, cameraZ);

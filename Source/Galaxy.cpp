@@ -1,4 +1,5 @@
 #include "Galaxy.h"
+#include <cmath>
 
 Galaxy::Galaxy()
 {
@@ -14,4 +15,19 @@ Galaxy::Galaxy()
 }
 Galaxy::~Galaxy() {
 
+}
+
+//Calculate current distance to camera for sorting for transparency
+float Galaxy::GetDistanceToCamera(const float cameraX, const float cameraY, float cameraZ)
+{
+	distanceToCam = sqrt(pow(((totalPosX)-cameraX), 2) + pow(((totalPosY)-cameraY), 2) + pow(((totalPosZ)-cameraZ), 2));
+	return distanceToCam;
+}
+
+
+void Galaxy::SetTotalPosFromMatrix(float matrixX, float matrixY, float matrixZ)
+{
+	totalPosX = matrixX;
+	totalPosY = matrixY;
+	totalPosZ = matrixZ;
 }
