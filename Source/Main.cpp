@@ -302,18 +302,14 @@ void display()
 	glRotatef(15.0, 1.0, 0.0, 0.0);
 
 
-	for (int i = 0; i < GALAXY_AMOUNT; i++)
+	for (auto g : galaxies)
 	{
 		glPushMatrix();
-		Galaxy g = galaxies[i];
-
-		
 		glTranslatef(g.centerX, g.centerY, g.centerZ);
 		
-		for (int i = 0; i < GALAXY_AMOUNT; i++)
+		for (auto p : g.planets)
 		{
-			Object p = g.planets[i];
-			Object center = g.planets[p.rotateAround];
+			const Object center = g.planets[p.rotateAround];
 
 			glRotatef(360.0*day / 365.0, g.rotaX, g.rotaY, g.rotaZ);
 			glPushMatrix();
@@ -349,6 +345,7 @@ void display()
 	vector<Galaxy> allGalaxies(galaxies, galaxies+10);
 	sort(allGalaxies.begin(), allGalaxies.end(), distanceComparison);
 	glDisable(GL_CULL_FACE);
+
 	for (int i = 0; i < GALAXY_AMOUNT; i++)
 	{
 		glPushMatrix();
