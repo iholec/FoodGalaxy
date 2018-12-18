@@ -348,7 +348,7 @@ void display()
 
 	vector<Galaxy> allGalaxies(galaxies, galaxies+10);
 	sort(allGalaxies.begin(), allGalaxies.end(), distanceComparison);
-
+	glDisable(GL_CULL_FACE);
 	for (int i = 0; i < GALAXY_AMOUNT; i++)
 	{
 		glPushMatrix();
@@ -356,15 +356,12 @@ void display()
 		
 		glTranslatef(g.centerX, g.centerY, g.centerZ);
 		
-		//glDisable(GL_CULL_FACE);
 		GLfloat sunLight[] = { 1,1,0 };
 		drawGlowingSphere(&textures[15], 0.5, sunLight);
-		//glEnable(GL_CULL_FACE);
-
 		
-
 		glPopMatrix();
 	}
+	glEnable(GL_CULL_FACE);
 	glDepthMask(GL_TRUE);
 
 
