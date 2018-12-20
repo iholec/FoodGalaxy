@@ -65,7 +65,7 @@ void Object::draw(const float cameraX, const float cameraY, const float cameraZ)
 	switch (lod)
 	{
 	case 0:
-		drawSphere();
+		drawSphere(20);
 		break;
 	case 1:
 		drawCube();
@@ -146,7 +146,7 @@ void Object::drawPyramid()
 }
 
 //draws a classic Sphere
-void Object::drawSphere() {
+void Object::drawSphere(int slices) {
 
 	GLUquadric *qobj = gluNewQuadric();
 
@@ -156,7 +156,7 @@ void Object::drawSphere() {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, *texture);
 
-	gluSphere(qobj, size, 20, 20);
+	gluSphere(qobj, size, slices, 20);
 
 	gluDeleteQuadric(qobj);
 	glDisable(GL_TEXTURE_2D);

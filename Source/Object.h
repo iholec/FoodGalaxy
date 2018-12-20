@@ -33,7 +33,7 @@ public:
 private:
 	int lod1Dist, lod2Dist;
 
-	void drawSphere();
+	void drawSphere(int slices);
 	void drawCube();
 	void drawPyramid();
 };
