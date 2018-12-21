@@ -1,7 +1,7 @@
 #include "Object.h"
 #include <cmath>
 
-
+//Creates the Object (in this case used as planets) at a somewhat random position in the universe, and sets size, speed and LOD distances
 Object::Object()
 {
 	lod = 0;
@@ -33,6 +33,7 @@ float Object::GetDistanceToCamera(const float cameraX, const float cameraY, floa
 	return sqrt(pow(((totalPosX) - cameraX), 2) + pow(((totalPosY) - cameraY), 2) + pow(((totalPosZ) - cameraZ), 2));
 }
 
+//Recalculates what LOD should be used for the current distance to the camera
 void Object::RecalculateLOD(const float cameraX, const float cameraY, float cameraZ)
 {
 	distanceToCamera = GetDistanceToCamera(cameraX, cameraY, cameraZ);
@@ -50,7 +51,7 @@ void Object::RecalculateLOD(const float cameraX, const float cameraY, float came
 	}
 }
 
-
+//Gets the TotalPosition from the ModelView Matrix
 void Object::SetTotalPosFromMatrix(float matrixX, float matrixY, float matrixZ)
 {
 	totalPosX = matrixX;
@@ -77,6 +78,7 @@ void Object::draw(const float cameraX, const float cameraY, const float cameraZ)
 
 }
 
+//Example Draw method to illustrate the use of LODs
 void Object::drawCube()
 {
 	glEnable(GL_TEXTURE_2D);
@@ -116,6 +118,7 @@ void Object::drawCube()
 	glDisable(GL_TEXTURE_2D);
 }
 
+//Example Draw method to illustrate the use of LODs
 void Object::drawPyramid()
 {
 	glEnable(GL_TEXTURE_2D);

@@ -263,7 +263,7 @@ void drawSpiegelei(GLuint *tex) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-
+//Distance Comparison method used for sorting transparent objects
 bool distanceComparison(Galaxy i, Galaxy j)
 {
 	return i.distanceToCam > j.distanceToCam;
@@ -344,7 +344,7 @@ void display()
 
 	vector<Galaxy> allGalaxies(galaxies, galaxies+10);
 	sort(allGalaxies.begin(), allGalaxies.end(), distanceComparison);
-	glDisable(GL_CULL_FACE);
+	//glDisable(GL_CULL_FACE);
 
 	for (int i = 0; i < GALAXY_AMOUNT; i++)
 	{
@@ -358,7 +358,7 @@ void display()
 		
 		glPopMatrix();
 	}
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glDepthMask(GL_TRUE);
 
 
